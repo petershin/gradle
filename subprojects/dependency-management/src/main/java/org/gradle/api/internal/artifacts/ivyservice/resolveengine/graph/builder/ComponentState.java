@@ -142,6 +142,11 @@ public class ComponentState implements ComponentResolutionState, DependencyGraph
         return metadata;
     }
 
+    ComponentResolveMetadata getMetadataWithoutRetryMissing() {
+        resolve(false);
+        return metadata;
+    }
+
     @Override
     public ComponentIdentifier getComponentId() {
         // Use the resolved component id if available: this ensures that Maven Snapshot ids are correctly reported
@@ -177,6 +182,10 @@ public class ComponentState implements ComponentResolutionState, DependencyGraph
     }
 
     public void resolve() {
+        resolve(true);
+    }
+
+    public void resolve(boolean retryMissing) {
         if (alreadyResolved()) {
             return;
         }
@@ -184,7 +193,7 @@ public class ComponentState implements ComponentResolutionState, DependencyGraph
         // Any metadata overrides (e.g classifier/artifacts/client-module) will be taken from the first dependency that referenced this component
         ComponentOverrideMetadata componentOverrideMetadata = DefaultComponentOverrideMetadata.forDependency(firstSelectedBy.getDependencyMetadata());
 
-        DefaultBuildableComponentResolveResult result = new DefaultBuildableComponentResolveResult();
+        DefaultBuildableComponentResolveResult result = new DefaultBuildableComponentResolveResult(retryMissing);
         resolver.resolve(componentIdentifier, componentOverrideMetadata, result);
         if (result.getFailure() != null) {
             metadataResolveFailure = result.getFailure();

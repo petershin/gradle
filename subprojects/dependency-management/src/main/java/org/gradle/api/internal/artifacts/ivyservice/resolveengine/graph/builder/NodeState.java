@@ -286,7 +286,7 @@ class NodeState implements DependencyGraphNode {
         // we have to try to get metadata for the aligned version. If it's there,
         // it means we can align, otherwise, we must NOT add the edge, or resolution
         // would fail
-        ComponentResolveMetadata metadata = version.getMetadata();
+        ComponentResolveMetadata metadata = version.getMetadataWithoutRetryMissing();
         return new PotentialEdge(edge, toModuleVersionId, metadata, version);
     }
 
