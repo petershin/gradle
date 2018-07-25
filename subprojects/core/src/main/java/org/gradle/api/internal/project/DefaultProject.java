@@ -76,6 +76,7 @@ import org.gradle.api.provider.ProviderFactory;
 import org.gradle.api.resources.ResourceHandler;
 import org.gradle.api.tasks.WorkResult;
 import org.gradle.configuration.ScriptPluginFactory;
+import org.gradle.configuration.internal.ListenerBuildOperationDecorator;
 import org.gradle.configuration.project.ProjectConfigurationActionContainer;
 import org.gradle.configuration.project.ProjectEvaluator;
 import org.gradle.groovy.scripts.ScriptSource;
@@ -976,22 +977,22 @@ public class DefaultProject extends AbstractPluginAware implements ProjectIntern
 
     @Override
     public void beforeEvaluate(Action<? super Project> action) {
-        evaluationListener.add("beforeEvaluate", action);
+        evaluationListener.add("beforeEvaluate", getListenerBuildOperations().decorate(action));
     }
 
     @Override
     public void afterEvaluate(Action<? super Project> action) {
-        evaluationListener.add("afterEvaluate", action);
+        evaluationListener.add("afterEvaluate", getListenerBuildOperations().decorate(action));
     }
 
     @Override
     public void beforeEvaluate(Closure closure) {
-        evaluationListener.add(new ClosureBackedMethodInvocationDispatch("beforeEvaluate", closure));
+        evaluationListener.add(new ClosureBackedMethodInvocationDispatch("beforeEvaluate", getListenerBuildOperations().decorate(closure)));
     }
 
     @Override
     public void afterEvaluate(Closure closure) {
-        evaluationListener.add(new ClosureBackedMethodInvocationDispatch("afterEvaluate", closure));
+        evaluationListener.add(new ClosureBackedMethodInvocationDispatch("afterEvaluate", getListenerBuildOperations().decorate(closure)));
     }
 
     @Override
@@ -1337,6 +1338,11 @@ public class DefaultProject extends AbstractPluginAware implements ProjectIntern
 
     @Inject
     protected CrossProjectConfigurator getProjectConfigurator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Inject
+    protected ListenerBuildOperationDecorator getListenerBuildOperations() {
         throw new UnsupportedOperationException();
     }
 
