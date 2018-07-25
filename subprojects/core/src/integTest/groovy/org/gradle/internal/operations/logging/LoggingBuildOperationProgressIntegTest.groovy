@@ -118,7 +118,8 @@ class LoggingBuildOperationProgressIntegTest extends AbstractIntegrationSpec {
         applyBuildScriptProgress[0].details.category == 'org.gradle.api.Project'
         applyBuildScriptProgress[0].details.message == 'from build.gradle'
 
-        def notifyTaskGraphProgress = operations.only("Notify task graph whenReady listeners").progress
+        def notifyTaskGraph = operations.only("Notify task graph whenReady listeners")
+        def notifyTaskGraphProgress = notifyTaskGraph.children.first().progress
         notifyTaskGraphProgress.size() == 1
         notifyTaskGraphProgress[0].details.logLevel == 'WARN'
         notifyTaskGraphProgress[0].details.category == 'org.gradle.api.Project'
@@ -145,6 +146,9 @@ class LoggingBuildOperationProgressIntegTest extends AbstractIntegrationSpec {
         downloadProgress[0].details.logLevel == 'LIFECYCLE'
         downloadProgress[0].details.category == ProgressLoggingExternalResourceAccessor.ProgressLoggingExternalResource.name
         downloadProgress[0].details.description == "Download http://localhost:${server.port}/repo/org/foo/1.0/foo-1.0.jar"
+
+        cleanup:
+        operations.debugTree()
     }
 
     def "captures output from buildSrc"() {
