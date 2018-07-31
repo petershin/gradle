@@ -239,7 +239,6 @@ public class DaemonMessageSerializer {
 
         @Override
         public void write(Encoder encoder, BuildActionParameters parameters) throws Exception {
-            FILE_SERIALIZER.write(encoder, parameters.getCurrentDir());
             NO_NULL_STRING_MAP_SERIALIZER.write(encoder, parameters.getSystemProperties());
             NO_NULL_STRING_MAP_SERIALIZER.write(encoder, parameters.getEnvVariables());
             logLevelSerializer.write(encoder, parameters.getLogLevel());
@@ -251,7 +250,6 @@ public class DaemonMessageSerializer {
 
         @Override
         public BuildActionParameters read(Decoder decoder) throws Exception {
-            File currentDir = FILE_SERIALIZER.read(decoder);
             Map<String, String> sysProperties = NO_NULL_STRING_MAP_SERIALIZER.read(decoder);
             Map<String, String> envVariables = NO_NULL_STRING_MAP_SERIALIZER.read(decoder);
             LogLevel logLevel = logLevelSerializer.read(decoder);
@@ -259,7 +257,7 @@ public class DaemonMessageSerializer {
             boolean continuous = decoder.readBoolean();
             boolean interactive = decoder.readBoolean();
             ClassPath classPath = DefaultClassPath.of(classPathSerializer.read(decoder));
-            return new DefaultBuildActionParameters(sysProperties, envVariables, currentDir, logLevel, useDaemon, continuous, interactive, classPath);
+            return new DefaultBuildActionParameters(sysProperties, envVariables, logLevel, useDaemon, continuous, interactive, classPath);
         }
     }
 

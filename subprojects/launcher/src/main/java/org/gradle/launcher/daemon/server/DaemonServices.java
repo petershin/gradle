@@ -131,7 +131,7 @@ public class DaemonServices extends DefaultServiceRegistry {
         return new DaemonHealthStats(runningStats, executorFactory);
     }
 
-    protected ImmutableList<DaemonCommandAction> createDaemonCommandActions(DaemonContext daemonContext, ProcessEnvironment processEnvironment, DaemonHealthStats healthStats, DaemonHealthCheck healthCheck, BuildExecuter buildActionExecuter, DaemonRunningStats runningStats) {
+    protected ImmutableList<DaemonCommandAction> createDaemonCommandActions(DaemonContext daemonContext, DaemonHealthStats healthStats, DaemonHealthCheck healthCheck, BuildExecuter buildActionExecuter, DaemonRunningStats runningStats) {
         File daemonLog = getDaemonLogFile();
         DaemonDiagnostics daemonDiagnostics = new DaemonDiagnostics(daemonLog, daemonContext.getPid());
         return ImmutableList.of(
@@ -140,7 +140,7 @@ public class DaemonServices extends DefaultServiceRegistry {
             new HandleReportStatus(),
             new ReturnResult(),
             new StartBuildOrRespondWithBusy(daemonDiagnostics), // from this point down, the daemon is 'busy'
-            new EstablishBuildEnvironment(processEnvironment),
+            new EstablishBuildEnvironment(),
             new LogToClient(loggingManager, daemonDiagnostics), // from this point down, logging is sent back to the client
             new LogAndCheckHealth(healthStats, healthCheck),
             new ForwardClientInput(),

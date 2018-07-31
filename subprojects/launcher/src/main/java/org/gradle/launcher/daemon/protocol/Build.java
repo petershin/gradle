@@ -61,7 +61,6 @@ public class Build extends Command {
     public String toString() {
         return getClass().getSimpleName() + "{"
                 + "id=" + getIdentifier()
-                + ", currentDir=" + parameters.getCurrentDir()
                 + '}';
     }
 }

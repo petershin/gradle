@@ -173,7 +173,6 @@ class BuildActionsFactory implements CommandLineAction {
         return new DefaultBuildActionParameters(
                 daemonParameters.getEffectiveSystemProperties(),
                 daemonParameters.getEnvironmentVariables(),
-                SystemProperties.getInstance().getCurrentDir(),
                 startParameter.getLogLevel(),
                 daemonParameters.isEnabled(), startParameter.isContinuous(), daemonParameters.isInteractive(), ClassPath.EMPTY);
     }

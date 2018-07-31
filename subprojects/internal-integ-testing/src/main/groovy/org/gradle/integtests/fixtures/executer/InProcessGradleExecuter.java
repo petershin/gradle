@@ -336,7 +336,6 @@ public class InProcessGradleExecuter extends DaemonGradleExecuter {
         return new DefaultBuildActionParameters(
             System.getProperties(),
             System.getenv(),
-            SystemProperties.getInstance().getCurrentDir(),
             startParameter.getLogLevel(),
             false,
             startParameter.isContinuous(),

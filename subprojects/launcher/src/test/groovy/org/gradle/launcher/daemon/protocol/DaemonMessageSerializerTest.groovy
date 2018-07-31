@@ -124,7 +124,7 @@ class DaemonMessageSerializerTest extends SerializerSpec {
         expect:
         def action = new ExecuteBuildAction(new StartParameterInternal())
         def clientMetadata = new GradleLauncherMetaData()
-        def params = new DefaultBuildActionParameters([:], [:], new File("some-dir"), LogLevel.ERROR, true, false, false, ClassPath.EMPTY)
+        def params = new DefaultBuildActionParameters([:], [:], LogLevel.ERROR, true, false, false, ClassPath.EMPTY)
         def message = new Build(UUID.randomUUID(), [1, 2, 3] as byte[], action, clientMetadata, 1234L, params)
         def result = serialize(message, serializer)
         result instanceof Build

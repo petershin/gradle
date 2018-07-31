@@ -19,13 +19,11 @@ import org.gradle.api.logging.LogLevel;
 import org.gradle.internal.classpath.ClassPath;
 import org.gradle.util.GUtil;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultBuildActionParameters implements BuildActionParameters, Serializable {
-    private final File currentDir;
     private final LogLevel logLevel;
     private final Map<String, String> systemProperties;
     private final Map<String, String> envVariables;
@@ -35,8 +33,7 @@ public class DefaultBuildActionParameters implements BuildActionParameters, Seri
     private final boolean interactive;
     private final ClassPath injectedPluginClasspath;
 
-    public DefaultBuildActionParameters(Map<?, ?> systemProperties, Map<String, String> envVariables, File currentDir, LogLevel logLevel, boolean useDaemon, boolean continuous, boolean interactive, ClassPath injectedPluginClasspath) {
-        this.currentDir = currentDir;
+    public DefaultBuildActionParameters(Map<?, ?> systemProperties, Map<String, String> envVariables, LogLevel logLevel, boolean useDaemon, boolean continuous, boolean interactive, ClassPath injectedPluginClasspath) {
         this.logLevel = logLevel;
         this.useDaemon = useDaemon;
         this.continuous = continuous;
@@ -57,10 +54,6 @@ public class DefaultBuildActionParameters implements BuildActionParameters, Seri
         return envVariables;
     }
 
-    public File getCurrentDir() {
-        return currentDir;
-    }
-
     public LogLevel getLogLevel() {
         return logLevel;
     }
@@ -68,7 +61,6 @@ public class DefaultBuildActionParameters implements BuildActionParameters, Seri
     @Override
     public String toString() {
         return "DefaultBuildActionParameters{"
-            + ", currentDir=" + currentDir
             + ", systemProperties size=" + systemProperties.size()
             + ", envVariables size=" + envVariables.size()
             + ", logLevel=" + logLevel

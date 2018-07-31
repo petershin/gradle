@@ -26,8 +26,6 @@ public interface BuildActionParameters {
 
     Map<String, String> getEnvVariables();
 
-    File getCurrentDir();
-
     LogLevel getLogLevel();
 
     boolean isUseDaemon();

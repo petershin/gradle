@@ -34,20 +34,26 @@ import java.util.Properties;
  * Aims to make the local environment the same as the client's environment.
  */
 public class EstablishBuildEnvironment extends BuildCommandOnly {
-    private final static Logger LOGGER = Logging.getLogger(EstablishBuildEnvironment.class);
 
-    private final ProcessEnvironment processEnvironment;
-
-    public EstablishBuildEnvironment(ProcessEnvironment processEnvironment) {
-        this.processEnvironment = processEnvironment;
+    public EstablishBuildEnvironment() {
     }
 
     protected void doBuild(DaemonCommandExecution execution, Build build) {
         Properties originalSystemProperties = new Properties();
         originalSystemProperties.putAll(System.getProperties());
-        Map<String, String> originalEnv = new HashMap<String, String>(System.getenv());
-        File originalProcessDir = FileUtils.canonicalize(new File("."));
+        updateSystemProperties(build);
 
+        Locale locale = Locale.getDefault();
+
+        try {
+            execution.proceed();
+        } finally {
+            System.setProperties(originalSystemProperties);
+            Locale.setDefault(locale);
+        }
+    }
+
+    private void updateSystemProperties(Build build) {
         for (Map.Entry<String, String> entry : build.getParameters().getSystemProperties().entrySet()) {
             if (SystemProperties.getInstance().getStandardProperties().contains(entry.getKey())) {
                 continue;
@@ -60,31 +66,6 @@ public class EstablishBuildEnvironment extends BuildCommandOnly {
                 continue;
             }
             System.setProperty(entry.getKey(), entry.getValue());
-        }
-
-        LOGGER.debug("Configuring env variables: {}", build.getParameters().getEnvVariables());
-        EnvironmentModificationResult setEnvironmentResult = processEnvironment.maybeSetEnvironment(build.getParameters().getEnvVariables());
-        if(!setEnvironmentResult.isSuccess()) {
-            LOGGER.warn("Warning: Unable able to set daemon's environment variables to match the client because: "
-                + System.getProperty("line.separator") + "  "
-                + setEnvironmentResult
-                + System.getProperty("line.separator") + "  "
-                + "If the daemon was started with a significantly different environment from the client, and your build "
-                + System.getProperty("line.separator") + "  "
-                + "relies on environment variables, you may experience unexpected behavior.");
-        }
-        processEnvironment.maybeSetProcessDir(build.getParameters().getCurrentDir());
-
-        // Capture and restore this in case the build code calls Locale.setDefault()
-        Locale locale = Locale.getDefault();
-
-        try {
-            execution.proceed();
-        } finally {
-            System.setProperties(originalSystemProperties);
-            processEnvironment.maybeSetEnvironment(originalEnv);
-            processEnvironment.maybeSetProcessDir(originalProcessDir);
-            Locale.setDefault(locale);
         }
     }
 }
