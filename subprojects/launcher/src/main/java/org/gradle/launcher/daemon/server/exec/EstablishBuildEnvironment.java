@@ -56,7 +56,7 @@ public class EstablishBuildEnvironment extends BuildCommandOnly {
                 continue;
             }
             if (entry.getKey().startsWith("sun.") || entry.getKey().startsWith("awt.")
-                    || entry.getKey().contains(".awt.")) {
+                || entry.getKey().contains(".awt.")) {
                 continue;
             }
             System.setProperty(entry.getKey(), entry.getValue());
