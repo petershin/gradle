@@ -99,17 +99,6 @@ These methods have been deprecated and the `create()` or `register()` methods sh
 
 - `project.java.sourceSets` is now `project.sourceSets`
 
-### Restricting cross-configuration and lifecycle hooks from lazy configuration APIs
-
-In Gradle 4.9, we [introduced a new API](https://blog.gradle.org/preview-avoiding-task-configuration-time) for creating and configuring tasks.
-
-The following hooks are disallowed when called from these new APIs:
-
-- `project.afterEvaluate(Action)` and `project.afterEvaluate(Closure)`
-- `project.beforeEvaluate(Action)` and `project.beforeEvaluate(Closure)`
-
-If you attempt to call any of these methods an exception will be thrown. Gradle restricts these APIs because mixing these APIs with lazy configuration can cause hard to diagnose build failures and complexity.
-
 ### Cross Account AWS S3 Artifact Publishing
 
 The S3 [repository transport protocol](userguide/repository_types.html#sub:supported_transport_protocols) allows Gradle to publish artifacts to AWS S3 buckets. Starting with this release, every artifact uploaded to an S3 bucket will be equipped with `bucket-owner-full-control` canned ACL. Make sure the used AWS credentials can do `s3:PutObjectAcl` and `s3:PutObjectVersionAcl` to ensure successful artifacts uploads.

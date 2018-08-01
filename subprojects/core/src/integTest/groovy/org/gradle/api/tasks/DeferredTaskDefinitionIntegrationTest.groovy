@@ -16,6 +16,7 @@
 
 package org.gradle.api.tasks
 
+import groovy.transform.NotYetImplemented
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
 import spock.lang.Issue
 import spock.lang.Unroll
@@ -897,6 +898,7 @@ class DeferredTaskDefinitionIntegrationTest extends AbstractIntegrationSpec {
         ["Project#beforeEvaluate(Action)"  , "beforeEvaluate new Action<Project>() { void execute(Project p) {} }"],
     ]
 
+    @NotYetImplemented
     @Unroll
     def "cannot execute #description during lazy task creation action execution"() {
         settingsFile << "include 'nested'"
@@ -933,6 +935,7 @@ class DeferredTaskDefinitionIntegrationTest extends AbstractIntegrationSpec {
         [description, code] << INVALID_CALL_FROM_LAZY_CONFIGURATION
     }
 
+    @NotYetImplemented
     @Unroll
     def "cannot execute #description during lazy task configuration action execution"() {
         settingsFile << "include 'nested'"
@@ -970,6 +973,7 @@ class DeferredTaskDefinitionIntegrationTest extends AbstractIntegrationSpec {
         [description, code] << INVALID_CALL_FROM_LAZY_CONFIGURATION
     }
 
+    @NotYetImplemented
     @Unroll
     def "cannot execute #description on another project during lazy task creation action execution"() {
         settingsFile << "include 'nested', 'other'"
@@ -1010,6 +1014,7 @@ class DeferredTaskDefinitionIntegrationTest extends AbstractIntegrationSpec {
         [description, code] << INVALID_CALL_FROM_LAZY_CONFIGURATION
     }
 
+    @NotYetImplemented
     @Unroll
     def "cannot execute #description on another project during lazy task configuration action execution"() {
         settingsFile << "include 'nested', 'other'"
